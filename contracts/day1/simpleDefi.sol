@@ -30,6 +30,14 @@ contract MyDefi {
         return (_reserve1, _reserve2);
     }
 
+    function AddLiquidity (uint256 _Amount1 , uint256 _Amount2){
+        require(_Amount1 > 0 && _Amount2 > 0 , "Amount must be greater than 0");
+        IERC20(token1).transferFrom(msg.sender, address(this), _Amount1);
+        IERC20(token2).transferFrom(msg.sender, address(this), _Amount2);
+        reserve1 += _Amount1;
+        reserve2 += _Amount2;
+    }
+
 
 
 
