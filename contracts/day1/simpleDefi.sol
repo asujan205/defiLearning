@@ -7,8 +7,8 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 contract MyDefi {
     address public token1;
     address public token2;
-    uint256 public reverse1;
-    uint256 public reverse2;
+    uint256 public reserve1;
+    uint256 public reserve2;
     uint256 public FeePercentage;
 
     AggregatorV3Interface internal priceFeed1;
@@ -22,6 +22,16 @@ contract MyDefi {
         priceFeed1 = AggregatorV3Interface(_priceFeed1);
         FeePercentage = _FeePercentage;
     }
+
+    function getReservee() public view returns (uint256 , uint256) {
+        _reserve1 = reserve1;
+        _reserve2 = reserve2;
+
+        return (_reserve1, _reserve2);
+    }
+
+
+
 
 
 
