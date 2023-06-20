@@ -25,4 +25,10 @@ contract LiquidityValueCalculator is ILiquidityValueCalculator {
         TotalSupply = Pair.totalSupply();
     }
 
+    function LiquidityShareValue(uint256 liqudity, address tokenA ,address tokenB) external override returns(uint256 ValueA,uint256 ValueB){
+        (uint256 ReverseA,uint256 ReverseB,uint256 TotalSupply) = PairInfo(tokenA,tokenB);
+        ValueA = ReverseA * liqudity / TotalSupply;
+        ValueB = ReverseB * liqudity / TotalSupply;
+    }
+
 }
