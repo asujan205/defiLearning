@@ -10,11 +10,13 @@ import '@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol';
 
 
 
+
 contract LiquidityValueCalculator is ILiquidityValueCalculator {
     address public factory;
     constructor(address factory_) public {
         factory = factory_;
     }
+
 
     function PairInfo(address tokenA, address tokenB) internal view returns(uint256 ReverseA,uint256 ReverseB,uint256 TotalSupply){
         address pair = UniswapV2Library.pairFor(factory, tokenA, tokenB);
@@ -30,5 +32,6 @@ contract LiquidityValueCalculator is ILiquidityValueCalculator {
         ValueA = ReverseA * liqudity / TotalSupply;
         ValueB = ReverseB * liqudity / TotalSupply;
     }
+
 
 }
