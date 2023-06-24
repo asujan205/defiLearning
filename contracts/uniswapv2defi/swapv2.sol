@@ -5,6 +5,8 @@ import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Pair.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
+import "@uniswap/v2-periphery/contracts/libraries/UniswapV2Library.sol";
 
 
 contract TestSwap{
@@ -24,7 +26,20 @@ contract TestSwap{
 
 
     }
-    
+
+
+    function swapTokenForToken (address tokenIn, address tokenOut, uint256 amountIn, uint256 amountOutMin, address to) external {
+         address pair = UniswapV2Library.pairFor(
+            UniswapV2Library.getFactoryAddress(),
+            tokenIn,
+            tokenOut
+        );
+           address token0 = UniswapV2Pair(pair).token0();
+        address token1 = UniswapV2Pair(pair).token1();
+        IERC20(tokenIn).approve(UNISWAP_V2_ROUTER, amountIn);
+        
+
+    }
 
 
 
