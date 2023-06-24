@@ -37,9 +37,59 @@ contract TestSwap{
            address token0 = UniswapV2Pair(pair).token0();
         address token1 = UniswapV2Pair(pair).token1();
         IERC20(tokenIn).approve(UNISWAP_V2_ROUTER, amountIn);
-        
+
+
+        address[] memory path;
+        path = new address[](2);
+        path[0] = tokenIn;
+        path[1] = tokenOut;
+        uniswapV2Router.swapExactTokensForTokens(amountIn, amountOutMin, path, to, block.timestamp + 1800);
+
 
     }
+
+    function swapTokenForETH (address tokenIn, uint256 amountIn, uint256 amountOutMin, address to) external {
+        address[] memory path;
+        path = new address[](2);
+        path[0] = tokenIn;
+        path[1] = uniswapV2Router.WETH();
+        IERC20(tokenIn).approve(UNISWAP_V2_ROUTER, amountIn);
+        uniswapV2Router.swapExactTokensForETH(amountIn, amountOutMin, path, to, block.timestamp + 1800);
+    }
+
+
+    function swapETHForToken (address tokenOut, uint256 amountOutMin, address to) external payable {
+        address[] memory path;
+        path = new address[](2);
+        path[0] = uniswapV2Router.WETH();
+        path[1] = tokenOut;
+        uniswapV2Router.swapExactETHForTokens{value: msg.value}(amountOutMin, path, to, block.timestamp + 1800);
+    }
+
+function RemoveLiquidity(address tokenA, address tokenB, uint256 liquidity) external {
+    address pair = UniswapV2Library.pairFor(
+            UniswapV2Library.getFactoryAddress(),
+            tokenA,
+            tokenB
+        );
+    IERC20(pair).approve(UNISWAP_V2_ROUTER, liquidity);
+     uniswapRouter.removeLiquidity(
+            tokenA,
+            tokenB,
+            liquidity,
+            0,
+            0,
+            address(this),
+            block.timestamp + 3600
+        );
+}
+ 
+
+
+  
+
+
+   
 
 
 
