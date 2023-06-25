@@ -82,6 +82,15 @@ function RemoveLiquidity(address tokenA, address tokenB, uint256 liquidity) exte
             address(this),
             block.timestamp + 3600
         );
+
+        function getPair(address tokenA, address tokenB) external view returns (address pair) {
+        pair = UniswapV2Library.pairFor(
+            UniswapV2Library.getFactoryAddress(),
+            tokenA,
+            tokenB
+        );
+        
+        }
 }
  
 
