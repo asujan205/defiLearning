@@ -38,4 +38,34 @@ contract SingleSwap {
 
         amountOut = uniswapV3Router.exactInputSingle(params);
     }
+     function swapExactOutputSingle(uint256 amountOut, uint256 amountInMaximum) external returns (uint256 amountIn) {
+        
+        TransferHelper.safeTransferFrom(DAI, msg.sender, address(this), amountInMaximum);
+
+     
+        TransferHelper.safeApprove(DAI,UNISWAP_V3_ROUTER , amountInMaximum);
+
+        ISwapRouter.ExactOutputSingleParams memory params =
+            ISwapRouter.ExactOutputSingleParams({
+                tokenIn: DAI,
+                tokenOut: WETH9,
+                fee: poolFee,
+                recipient: msg.sender,
+                deadline: block.timestamp,
+                amountOut: amountOut,
+                amountInMaximum: amountInMaximum,
+                sqrtPriceLimitX96: 0
+            });
+
+        //.
+        amountIn = uniswapV3Router.exactOutputSingle(params);
+
+      
+        if (amountIn < amountInMaximum) {
+            TransferHelper.safeApprove(DAI, UNISWAP_V3_ROUTER, 0);
+            TransferHelper.safeTransfer(DAI, msg.sender, amountInMaximum - amountIn);
+        }
+    }
+
+
 }
