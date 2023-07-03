@@ -20,9 +20,9 @@ contract SingleSwap {
         uniswapV3Router = ISwapRouter(UNISWAP_V3_ROUTER);
     }
 
-    function SwapExactInputSingle (unit256 amountIn) external returns (uint256 amountOut){
+    function SwapExactInputSingle (uint256 amountIn) external returns (uint256 amountOut){
         TransferHelper.safeApprove(DAI, UNISWAP_V3_ROUTER, amountIn);
-        TransferHelper.safeTransferFrom(Dai, msg.sender,address(this), amountIn);
+        TransferHelper.safeTransferFrom(DAI, msg.sender,address(this), amountIn);
 
         ISwapRouter.ExactInputSingleParams memory params =
             ISwapRouter.ExactInputSingleParams({
@@ -49,7 +49,7 @@ contract SingleSwap {
             ISwapRouter.ExactOutputSingleParams({
                 tokenIn: DAI,
                 tokenOut: WETH9,
-                fee: poolFee,
+                fee: DAI_USDC_POOL_FEE,
                 recipient: msg.sender,
                 deadline: block.timestamp,
                 amountOut: amountOut,

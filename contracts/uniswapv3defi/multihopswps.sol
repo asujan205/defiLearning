@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-pragma solidity =0.7.6;
-pragma abicoder v2
-
-
-import '@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol';
+pragma solidity ^0.8.6;
+pragma abicoder v2;
 import '@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol';
+import '@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol';
 
 
 contract SwapMultiHops{
@@ -20,6 +18,25 @@ contract SwapMultiHops{
 
         uint24 public constant poolFee = 3000;
 
+function  swapExactInputMultiHop(uint256 _amountIn) public returns (uint256 amountOut) {
+       // Transfer `amountIn` of DAI to this contract.
+        TransferHelper.safeTransferFrom(DAI, msg.sender, address(this), _amountIn);
+
+        // Approve the router to spend DAI.
+        TransferHelper.safeApprove(DAI, address(swapRouter), _amountIn);
+      
+          ISwapRouter.ExactInputParams memory params =
+            ISwapRouter.ExactInputParams({
+                path: abi.encodePacked(DAI, poolFee, USDC, poolFee, WETH9),
+                recipient: msg.sender,
+                deadline: block.timestamp,
+                amountIn: _amountIn,
+                amountOutMinimum: 0
+            });
+
+        // Executes the swap.
+        amountOut = swapRouter.exactInput(params);
+    }
 
 
 }
