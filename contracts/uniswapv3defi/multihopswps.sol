@@ -39,4 +39,29 @@ function  swapExactInputMultiHop(uint256 _amountIn) public returns (uint256 amou
     }
 
 
+    function swapExactOutputMultihop(uint256 amountOut, uint256 amountInMaximum) external returns (uint256 amountIn) {
+        // Transfer the specified `amountInMaximum` to this contract.
+        TransferHelper.safeTransferFrom(DAI, msg.sender, address(this), amountInMaximum);
+        // Approve the router to spend  `amountInMaximum`.
+        TransferHelper.safeApprove(DAI, address(swapRouter), amountInMaximum);
+
+
+        ISwapRouter.ExactOutputParams memory params =
+            ISwapRouter.ExactOutputParams({
+                path: abi.encodePacked(WETH9, poolFee, USDC, poolFee, DAI),
+                recipient: msg.sender,
+                deadline: block.timestamp,
+                amountOut: amountOut,
+                amountInMaximum: amountInMaximum
+            });
+
+        // Executes the swap, returning the amountIn actually spent.
+        amountIn = swapRouter.exactOutput(params);
+
+        // If the swap did not require the full amountInMaximum to achieve the exact amountOut then we refund msg.sender and approve the router to spend 0.
+        if (amountIn < amountInMaximum) {
+            TransferHelper.safeApprove(DAI, address(swapRouter), 0);
+            TransferHelper.safeTransferFrom(DAI, address(this), msg.sender, amountInMaximum - amountIn);
+        }
+    }
 }
