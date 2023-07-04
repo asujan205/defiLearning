@@ -9,3 +9,20 @@ import '@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol';
 import '@uniswap/v3-periphery/contracts/interfaces/INonfungiblePositionManager.sol';
 import '@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol';
 import '@uniswap/v3-periphery/contracts/base/LiquidityManagement.sol';
+
+
+
+contract LiquidityProvider is IERC721Receiver{
+
+        INonfungiblePositionManager public immutable nonfungiblePositionManager;
+
+            struct Deposit {
+        address owner;
+        uint128 liquidity;
+        address token0;
+        address token1;
+    }
+
+    mapping(uint256 => Deposit) public deposits;
+
+}
