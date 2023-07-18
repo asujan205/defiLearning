@@ -2,6 +2,7 @@
 
 // this smart contract is similar to the core contract of uniswap v3 for learning propodrf only 
 pragma solidity ^0.8.19;
+import "./library/Tick.sol";
 
 
 contract CLAMM {
@@ -11,6 +12,8 @@ contract CLAMM {
   address public  immutable factory;
     uint24 public  immutable fee;
     int24 public immutable tickSpacing;
+    uint128 public immutable maxLiquidityPerTick;
+    
 
     constructor (
 
@@ -25,6 +28,13 @@ contract CLAMM {
         token1 = _token1;
         fee = _fee;
         tickSpacing = _tickSpacing;
+
+        maxLiquidityPerTick = Tick.tickSpacingToMaxLiquidityPerTick(_tickSpacing);
+        
+
+        
+
+
     }
 
 
