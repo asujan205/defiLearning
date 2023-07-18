@@ -12,7 +12,24 @@ contract CLAMM {
     uint24 public  immutable fee;
     int24 public immutable tickSpacing;
 
-    constructor (){
+    constructor (
 
+        address _factory,
+        address _token0,
+        address _token1,
+        uint24 _fee,
+        int24 _tickSpacing
+    ) {
+        factory = _factory;
+        token0 = _token0;
+        token1 = _token1;
+        fee = _fee;
+        tickSpacing = _tickSpacing;
     }
+
+
+
+   
+
+    
 }
